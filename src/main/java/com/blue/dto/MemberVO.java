@@ -26,4 +26,5 @@ public class MemberVO {
 	private String member_Following_Count;
 	
 	private int bothFollow;
+	private int feedPageNum;
 }

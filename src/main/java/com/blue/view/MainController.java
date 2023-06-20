@@ -325,9 +325,6 @@ public class MainController {
 	    //[팔로우, 언팔로우 - 3] PostMapping으로 /moreLoadFollwing 잡아옴, 총 페이지 수 : followerTotalPageNum
 		String sessionId = ((MemberVO) session.getAttribute("loginUser")).getMember_Id();
 		
-		//System.out.println("if이전 현재 페이지 넘버 : "+ followingPageNum);
-		//System.out.println("if이전 전체 페이지 수 : " + followingTotalPageNum);
-		
 		int LocalPageFirstNum = followingPageNum*10+1;
 		int LocalPageLastNum = followingPageNum*10+10;
 		
@@ -339,7 +336,6 @@ public class MainController {
 			return dataMap;
 		}
 		
-		//System.out.println("if이후 : " + followingPageNum);
 		
 		FollowVO followVo = new FollowVO();
 		
@@ -347,10 +343,6 @@ public class MainController {
 		followVo.setFollowingLocalPageFirstNum(LocalPageFirstNum);
 		followVo.setFollowingLocalPageLastNum(LocalPageLastNum);
 		
-		//System.out.println("첫번째 행 : " + LocalPageFirstNum);
-		//System.out.println("마지막 행 : " + LocalPageLastNum);
-		
-		//System.out.println(sessionId);
 		
 		// 팔로워 추가 로드하기(행~행 조건으로 조회)
 		List<FollowVO> following_Id  = followService.getMoreFollowing(followVo);
@@ -396,15 +388,10 @@ public class MainController {
 		// 1. ajax에서 받아온 객체 받아놓기
 		int followerTotalPageNum = requestBody.get("followerTotalPageNum");
 	    int followerPageNum = requestBody.get("followerPageNum");
-	    
-	    //System.out.println("토탈 페이지 넘버 : " + followerTotalPageNum);
-	    //System.out.println("현재 페이지 넘버 : " + followerPageNum);
+	   
 				
 	    //[팔로우, 언팔로우 - 3] PostMapping으로 /moreLoadFollwing 잡아옴, 총 페이지 수 : followerTotalPageNum
 		String sessionId = ((MemberVO) session.getAttribute("loginUser")).getMember_Id();
-		
-		//System.out.println("if이전 현재 페이지 넘버 : "+ followerPageNum);
-		//System.out.println("if이전 전체 페이지 수 : " + followerTotalPageNum);
 		
 		int LocalPageFirstNum = followerPageNum*10+1;
 		int LocalPageLastNum = followerPageNum*10+10;
@@ -424,9 +411,6 @@ public class MainController {
 		followVo.setFollowing(sessionId);
 		followVo.setFollowerLocalPageFirstNum(LocalPageFirstNum);
 		followVo.setFollowerLocalPageLastNum(LocalPageLastNum);
-		
-		//System.out.println("첫번째 행 : " + LocalPageFirstNum);
-		//System.out.println("마지막 행 : " + LocalPageLastNum);
 		
 		// 팔로워 추가 로드하기(행~행 조건으로 조회)
 		List<FollowVO> follower_Id  = followService.getMoreFollower(followVo);
@@ -874,4 +858,82 @@ public class MainController {
 	      
 	      return ResponseEntity.ok(responseData);
 	   }
+	 
+	 
+	 
+	 
+	// index 페이지 로드
+		@GetMapping("/feedInfinite")
+		public ResponseEntity<Map<String, Object>> feedInfinite(Model model, HttpSession session) {
+			
+				String member_Id = ((MemberVO) session.getAttribute("loginUser")).getMember_Id();
+				
+										/* index페이지의 뉴스피드 부분 */
+				// 자신, 팔로잉한 사람들의 게시글을 담는부분
+				ArrayList<PostVO> postlist = postService.getlistPost(member_Id);
+				
+				System.out.println(postlist.get(0).getMember_Id());
+				System.out.println("게시글 " + postlist.size() + "개 불러옴");
+				
+				// 각 post_seq에 대한 댓글들을 매핑할 공간.
+				Map<Integer, ArrayList<ReplyVO>> replymap = new HashMap<>();
+				
+				// 정렬된 postlist의 인덱스 순으로 댓글 리스트를 매핑함.
+				// 동시에 각 게시글의 좋아요 카운트와 댓글 카운트를 저장.
+				for(int i=0; i<postlist.size(); i++) {
+					// 자신, 팔로잉한 사람들의 게시글의 post_seq를 불러온다.
+					int post_Seq = postlist.get(i).getPost_Seq();
+					
+					// i번째 게시글의 댓글 리스트를 담음
+					ArrayList<ReplyVO> replylist = replyService.getReplyPreview(post_Seq);
+					//System.out.println("replylist로 담음");
+					//System.out.println("[미리보기 댓글 - 1] replylist에 해당 게시글의 댓글 3개를 가져옴 / 아직 해당 댓글 좋아요 눌렀나 체크는 안됨");
+					//System.out.println("[미리보기 댓글 - 1.5] replylist size : " + replylist.size());
+					// i번째 게시글의 댓글 좋아요 여부 체크
+					for(int k = 0; k < replylist.size(); k++) {
+						ReplyVO voForReplyCheck = replylist.get(k);
+						String realReply_Member_Id = replylist.get(k).getMember_Id();
+						voForReplyCheck.setMember_Id(member_Id);
+						//System.out.println("[미리보기 댓글 - 2] 댓글 좋아요 눌렀나 확인하러 보냄");				
+						String reply_LikeYN = replyService.getCheckReplyLike(voForReplyCheck);
+						replylist.get(k).setReply_LikeYN(reply_LikeYN);
+						//System.out.println("[미리보기 댓글 - 5] DAO에서 리턴받아서 set해줌. 해당 댓글 좋아요 누름 ? " + replylist.get(k).getReply_LikeYN());
+						replylist.get(k).setMember_Id(realReply_Member_Id);
+					}
+					
+					// i번째의 게시글의 댓글을 map에 매핑하는 작업
+					replymap.put(i, replylist);
+					//System.out.println(i + "번째 게시글 댓글 여부" + replymap.get(i));			
+					
+					// i번째 게시글의 좋아요 여부 체크
+					PostVO voForLikeYN = new PostVO();
+					voForLikeYN.setMember_Id(member_Id);
+					voForLikeYN.setPost_Seq(post_Seq);
+					//System.out.println("[좋아요 여부 확인 - 0] 게시글 번호 : " + post_Seq);
+					//System.out.println("[좋아요 여부 확인 - 1] Setting 전 post_LikeYN = " + postlist.get(i).getPost_LikeYN());
+					String post_LikeYN = postService.getLikeYN(voForLikeYN);
+					postlist.get(i).setPost_LikeYN(post_LikeYN);
+					//System.out.println("[좋아요 여부 확인 - 4] Setting 후 post_LikeYN = " + postlist.get(i).getPost_LikeYN());
+					
+				}
+				
+				
+				// 전체 회원 프로필 이미지 조회
+				HashMap<String, String> profilemap = memberService.getMemberProfile();
+				//System.out.println("전체 회원 프로필: " + profilemap);
+				
+				Map<String, Object> responseData = new HashMap<>();
+				
+				responseData.put("profileMap", profilemap);
+				responseData.put("postList", postlist);
+				responseData.put("replyMap", replymap);
+				responseData.put("session_Id", member_Id);
+				
+				return ResponseEntity.ok(responseData);
+			
+		}
+	 
 }
+
+
+
