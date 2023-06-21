@@ -19,14 +19,6 @@ public class QnaDAO {
 	}
 
 	public List<QnaVO> getMyQna(String member_Id) {
-		System.out.println(member_Id);
-		System.out.println("DAO ¿È");
-		List<QnaVO> result = mybatis.selectList("QnaMapper.getMyQna", member_Id);
-		System.out.println("mapping ´Ù³à¿È");
-		System.out.println(result);
-		for(QnaVO abc : result) {
-			System.out.println(abc);
-		}
 		return mybatis.selectList("QnaMapper.getMyQna", member_Id);
 	}
 }
