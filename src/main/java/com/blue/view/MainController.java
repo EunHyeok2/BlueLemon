@@ -28,7 +28,7 @@ import com.blue.service.QnaService;
 import com.blue.service.ReplyService;
 
 @Controller
-//ÄÁÆ®·Ñ·¯¿¡¼­ 'loginUser', 'profileMap' ÀÌ¶ó´Â ÀÌ¸§À¸·Î ¸ğµ¨ °´Ã¼¸¦ »ı¼ºÇÒ¶§ ¼¼¼Ç¿¡ µ¿½Ã¿¡ ÀúÀåÇÑ´Ù.
+//ì»¨íŠ¸ë¡¤ëŸ¬ì—ì„œ 'loginUser', 'profileMap' ì´ë¼ëŠ” ì´ë¦„ìœ¼ë¡œ ëª¨ë¸ ê°ì²´ë¥¼ ìƒì„±í• ë•Œ ì„¸ì…˜ì— ë™ì‹œì— ì €ì¥í•œë‹¤.
 @SessionAttributes({"loginUser", "profileMap"})	
 public class MainController {
 
@@ -41,110 +41,110 @@ public class MainController {
 	@Autowired
 	private QnaService qnaService;
 	
-	// ·Î±×ÀÎ ÆäÀÌÁö·Î ÀÌµ¿
+	// ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ì´ë™
 	@GetMapping(value="/login")
 	public String login(){
-		//System.out.println("[·Î±×ÀÎ - 1] http://localhost:8082/blue/login ÀÔ·Â ½Ã '/login'À» GetMappingÇØ¼­ loginÃ¢À¸·Î ÀÌµ¿");
+		//System.out.println("[ë¡œê·¸ì¸ - 1] http://localhost:8082/blue/login ì…ë ¥ ì‹œ '/login'ì„ GetMappingí•´ì„œ loginì°½ìœ¼ë¡œ ì´ë™");
 		return "login";
 	}
 	
-	// ·Î±×ÀÎ Ã³¸®
+	// ë¡œê·¸ì¸ ì²˜ë¦¬
 	@PostMapping("/loginProc")
 	public String LoginAction(Model model, @ModelAttribute("vo") MemberVO vo) {
-		//System.out.println("[·Î±×ÀÎ - 2] login.jsp¿¡¼­ /loginProc ¿äÃ»ÇÑ °É Àâ¾Æ¿È");
+		//System.out.println("[ë¡œê·¸ì¸ - 2] login.jspì—ì„œ /loginProc ìš”ì²­í•œ ê±¸ ì¡ì•„ì˜´");
 		int result = memberService.doLogin(vo);
 		
 		if(result == 1) {			
-			//System.out.println("[·Î±×ÀÎ - 7 - if - 1] MemberDAO¿¡¼­ ¹Ş¾Æ¿Â result·Î ·Î±×ÀÎ Ã³¸®ÇÏ°í memberServiceÀÇ getMemberÈ£Ãâ");
-			//System.out.println("[·Î±×ÀÎ - 7 - if - 5] getMember·Î ¹Ş¾Æ¿Â È¸¿ø Á¤º¸¸¦ loginUser¶ó´Â ÀÌ¸§À¸·Î ¼¼¼Ç¿¡ ¿Ã¸®°í index.jsp È£Ãâ");
+			//System.out.println("[ë¡œê·¸ì¸ - 7 - if - 1] MemberDAOì—ì„œ ë°›ì•„ì˜¨ resultë¡œ ë¡œê·¸ì¸ ì²˜ë¦¬í•˜ê³  memberServiceì˜ getMemberí˜¸ì¶œ");
+			//System.out.println("[ë¡œê·¸ì¸ - 7 - if - 5] getMemberë¡œ ë°›ì•„ì˜¨ íšŒì› ì •ë³´ë¥¼ loginUserë¼ëŠ” ì´ë¦„ìœ¼ë¡œ ì„¸ì…˜ì— ì˜¬ë¦¬ê³  index.jsp í˜¸ì¶œ");
 			model.addAttribute("loginUser", memberService.getMember(vo.getMember_Id()));
 			return "redirect:index";
 		} else {
-			//System.out.println("[·Î±×ÀÎ - 7 - else - 1] Á¤»óÀÌ ¾Æ´Ï¸é login_fail.jsp È£Ãâ -> alert ÈÄ login.jsp·Î");
+			//System.out.println("[ë¡œê·¸ì¸ - 7 - else - 1] ì •ìƒì´ ì•„ë‹ˆë©´ login_fail.jsp í˜¸ì¶œ -> alert í›„ login.jspë¡œ");
 			return "login_fail";
 		}
 	}
 
-	// ·Î±×¾Æ¿ô Ã³¸®
+	// ë¡œê·¸ì•„ì›ƒ ì²˜ë¦¬
 	@GetMapping("/logout")
 	public String logout(SessionStatus status) {
 		status.setComplete();
 		return "login";
 	}
 	
-	// index ÆäÀÌÁö ·Îµå
+	// index í˜ì´ì§€ ë¡œë“œ
 	@GetMapping("/index")
 	public String getRecommendMember(Model model, HttpSession session) {
 		
 		if(session.getAttribute("loginUser") == null) {
-			//System.out.println("¼¼¼Ç°ª ¾øÀ½");
-			model.addAttribute("message", "·Î±×ÀÎÀ» ÇØÁÖ¼¼¿ä");
+			//System.out.println("ì„¸ì…˜ê°’ ì—†ìŒ");
+			model.addAttribute("message", "ë¡œê·¸ì¸ì„ í•´ì£¼ì„¸ìš”");
 			return "login";
 		} else {
-									/* indexÆäÀÌÁöÀÇ ÆÈ·Î¿ì ºÎºĞ */
-			//System.out.println("[¸â¹öÃßÃµ - 1] ·Î±×ÀÎ ÈÄ index ¿äÃ»ÇÏ¸é GetMappingÀ¸·Î Àâ¾Æ¿À°í ¼¼¼ÇÀÇ loginUser¿¡¼­ Id »Ì¾Æ¼­ member_Id¿¡ ÀúÀå");
+									/* indexí˜ì´ì§€ì˜ íŒ”ë¡œìš° ë¶€ë¶„ */
+			//System.out.println("[ë©¤ë²„ì¶”ì²œ - 1] ë¡œê·¸ì¸ í›„ index ìš”ì²­í•˜ë©´ GetMappingìœ¼ë¡œ ì¡ì•„ì˜¤ê³  ì„¸ì…˜ì˜ loginUserì—ì„œ Id ë½‘ì•„ì„œ member_Idì— ì €ì¥");
 			String member_Id = ((MemberVO) session.getAttribute("loginUser")).getMember_Id();
 			
-			//System.out.println("[¸â¹öÃßÃµ - 2] member_Id¸¦ °¡Áö°í memberService¿¡ getRecommendMember ¿äÃ»");		
+			//System.out.println("[ë©¤ë²„ì¶”ì²œ - 2] member_Idë¥¼ ê°€ì§€ê³  memberServiceì— getRecommendMember ìš”ì²­");		
 			List<MemberVO> recommendMember = memberService.getRecommendMember(member_Id);
-			//System.out.println("[¸â¹öÃßÃµ - 5] DAO¿¡¼­ ÃßÃµ ¸®½ºÆ®¸¦ ¹Ş¾Æ¿Í¼­ List¿¡ ÀúÀåÇÏ°í model¿¡ ¿Ã¸®°í index.jsp È£Ãâ");
+			//System.out.println("[ë©¤ë²„ì¶”ì²œ - 5] DAOì—ì„œ ì¶”ì²œ ë¦¬ìŠ¤íŠ¸ë¥¼ ë°›ì•„ì™€ì„œ Listì— ì €ì¥í•˜ê³  modelì— ì˜¬ë¦¬ê³  index.jsp í˜¸ì¶œ");
 			
-			//System.out.println("[ÀÎ±â±Û - 1] ·Î±×ÀÎ ÈÄ index ¿äÃ»ÇÏ¸é GetMappingÀ¸·Î Àâ¾Æ¿È");
-			//System.out.println("[ÀÎ±â±Û - 2] postService¿¡ getHottestFeed ¿äÃ»");
+			//System.out.println("[ì¸ê¸°ê¸€ - 1] ë¡œê·¸ì¸ í›„ index ìš”ì²­í•˜ë©´ GetMappingìœ¼ë¡œ ì¡ì•„ì˜´");
+			//System.out.println("[ì¸ê¸°ê¸€ - 2] postServiceì— getHottestFeed ìš”ì²­");
 	    	List<PostVO> hottestFeed = postService.getHottestFeed();
-	    	//System.out.println("[ÀÎ±â±Û - 5] DAO¿¡¼­ hottestFeed ¹Ş¾Æ¿Í¼­ List¿¡ ÀúÀåÇÏ°í model¿¡ ¿Ã¸²");
+	    	//System.out.println("[ì¸ê¸°ê¸€ - 5] DAOì—ì„œ hottestFeed ë°›ì•„ì™€ì„œ Listì— ì €ì¥í•˜ê³  modelì— ì˜¬ë¦¼");
 			
 			
-									/* indexÆäÀÌÁöÀÇ ´º½ºÇÇµå ºÎºĞ */
-			// ÀÚ½Å, ÆÈ·ÎÀ×ÇÑ »ç¶÷µéÀÇ °Ô½Ã±ÛÀ» ´ã´ÂºÎºĞ
+									/* indexí˜ì´ì§€ì˜ ë‰´ìŠ¤í”¼ë“œ ë¶€ë¶„ */
+			// ìì‹ , íŒ”ë¡œì‰í•œ ì‚¬ëŒë“¤ì˜ ê²Œì‹œê¸€ì„ ë‹´ëŠ”ë¶€ë¶„
 			ArrayList<PostVO> postlist = postService.getlistPost(member_Id);
-			//System.out.println("°Ô½Ã±Û " + postlist.size() + "°³ ºÒ·¯¿È");
+			//System.out.println("ê²Œì‹œê¸€ " + postlist.size() + "ê°œ ë¶ˆëŸ¬ì˜´");
 			
-			// °¢ post_seq¿¡ ´ëÇÑ ´ñ±ÛµéÀ» ¸ÅÇÎÇÒ °ø°£.
+			// ê° post_seqì— ëŒ€í•œ ëŒ“ê¸€ë“¤ì„ ë§¤í•‘í•  ê³µê°„.
 			Map<Integer, ArrayList<ReplyVO>> replymap = new HashMap<>();
 			
-			// Á¤·ÄµÈ postlistÀÇ ÀÎµ¦½º ¼øÀ¸·Î ´ñ±Û ¸®½ºÆ®¸¦ ¸ÅÇÎÇÔ.
-			// µ¿½Ã¿¡ °¢ °Ô½Ã±ÛÀÇ ÁÁ¾Æ¿ä Ä«¿îÆ®¿Í ´ñ±Û Ä«¿îÆ®¸¦ ÀúÀå.
+			// ì •ë ¬ëœ postlistì˜ ì¸ë±ìŠ¤ ìˆœìœ¼ë¡œ ëŒ“ê¸€ ë¦¬ìŠ¤íŠ¸ë¥¼ ë§¤í•‘í•¨.
+			// ë™ì‹œì— ê° ê²Œì‹œê¸€ì˜ ì¢‹ì•„ìš” ì¹´ìš´íŠ¸ì™€ ëŒ“ê¸€ ì¹´ìš´íŠ¸ë¥¼ ì €ì¥.
 			for(int i=0; i<postlist.size(); i++) {
-				// ÀÚ½Å, ÆÈ·ÎÀ×ÇÑ »ç¶÷µéÀÇ °Ô½Ã±ÛÀÇ post_seq¸¦ ºÒ·¯¿Â´Ù.
+				// ìì‹ , íŒ”ë¡œì‰í•œ ì‚¬ëŒë“¤ì˜ ê²Œì‹œê¸€ì˜ post_seqë¥¼ ë¶ˆëŸ¬ì˜¨ë‹¤.
 				int post_Seq = postlist.get(i).getPost_Seq();
 				
-				// i¹øÂ° °Ô½Ã±ÛÀÇ ´ñ±Û ¸®½ºÆ®¸¦ ´ãÀ½
+				// ië²ˆì§¸ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ ë¦¬ìŠ¤íŠ¸ë¥¼ ë‹´ìŒ
 				ArrayList<ReplyVO> replylist = replyService.getReplyPreview(post_Seq);
-				//System.out.println("replylist·Î ´ãÀ½");
-				//System.out.println("[¹Ì¸®º¸±â ´ñ±Û - 1] replylist¿¡ ÇØ´ç °Ô½Ã±ÛÀÇ ´ñ±Û 3°³¸¦ °¡Á®¿È / ¾ÆÁ÷ ÇØ´ç ´ñ±Û ÁÁ¾Æ¿ä ´­·¶³ª Ã¼Å©´Â ¾ÈµÊ");
-				//System.out.println("[¹Ì¸®º¸±â ´ñ±Û - 1.5] replylist size : " + replylist.size());
-				// i¹øÂ° °Ô½Ã±ÛÀÇ ´ñ±Û ÁÁ¾Æ¿ä ¿©ºÎ Ã¼Å©
+				//System.out.println("replylistë¡œ ë‹´ìŒ");
+				//System.out.println("[ë¯¸ë¦¬ë³´ê¸° ëŒ“ê¸€ - 1] replylistì— í•´ë‹¹ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ 3ê°œë¥¼ ê°€ì ¸ì˜´ / ì•„ì§ í•´ë‹¹ ëŒ“ê¸€ ì¢‹ì•„ìš” ëˆŒë €ë‚˜ ì²´í¬ëŠ” ì•ˆë¨");
+				//System.out.println("[ë¯¸ë¦¬ë³´ê¸° ëŒ“ê¸€ - 1.5] replylist size : " + replylist.size());
+				// ië²ˆì§¸ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ ì¢‹ì•„ìš” ì—¬ë¶€ ì²´í¬
 				for(int k = 0; k < replylist.size(); k++) {
 					ReplyVO voForReplyCheck = replylist.get(k);
 					String realReply_Member_Id = replylist.get(k).getMember_Id();
 					voForReplyCheck.setMember_Id(member_Id);
-					//System.out.println("[¹Ì¸®º¸±â ´ñ±Û - 2] ´ñ±Û ÁÁ¾Æ¿ä ´­·¶³ª È®ÀÎÇÏ·¯ º¸³¿");				
+					//System.out.println("[ë¯¸ë¦¬ë³´ê¸° ëŒ“ê¸€ - 2] ëŒ“ê¸€ ì¢‹ì•„ìš” ëˆŒë €ë‚˜ í™•ì¸í•˜ëŸ¬ ë³´ëƒ„");				
 					String reply_LikeYN = replyService.getCheckReplyLike(voForReplyCheck);
 					replylist.get(k).setReply_LikeYN(reply_LikeYN);
-					//System.out.println("[¹Ì¸®º¸±â ´ñ±Û - 5] DAO¿¡¼­ ¸®ÅÏ¹Ş¾Æ¼­ setÇØÁÜ. ÇØ´ç ´ñ±Û ÁÁ¾Æ¿ä ´©¸§ ? " + replylist.get(k).getReply_LikeYN());
+					//System.out.println("[ë¯¸ë¦¬ë³´ê¸° ëŒ“ê¸€ - 5] DAOì—ì„œ ë¦¬í„´ë°›ì•„ì„œ setí•´ì¤Œ. í•´ë‹¹ ëŒ“ê¸€ ì¢‹ì•„ìš” ëˆ„ë¦„ ? " + replylist.get(k).getReply_LikeYN());
 					replylist.get(k).setMember_Id(realReply_Member_Id);
 				}
 				
-				// i¹øÂ°ÀÇ °Ô½Ã±ÛÀÇ ´ñ±ÛÀ» map¿¡ ¸ÅÇÎÇÏ´Â ÀÛ¾÷
+				// ië²ˆì§¸ì˜ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ì„ mapì— ë§¤í•‘í•˜ëŠ” ì‘ì—…
 				replymap.put(i, replylist);
-				//System.out.println(i + "¹øÂ° °Ô½Ã±Û ´ñ±Û ¿©ºÎ" + replymap.get(i));			
+				//System.out.println(i + "ë²ˆì§¸ ê²Œì‹œê¸€ ëŒ“ê¸€ ì—¬ë¶€" + replymap.get(i));			
 				
-				// i¹øÂ° °Ô½Ã±ÛÀÇ ÁÁ¾Æ¿ä ¿©ºÎ Ã¼Å©
+				// ië²ˆì§¸ ê²Œì‹œê¸€ì˜ ì¢‹ì•„ìš” ì—¬ë¶€ ì²´í¬
 				PostVO voForLikeYN = new PostVO();
 				voForLikeYN.setMember_Id(member_Id);
 				voForLikeYN.setPost_Seq(post_Seq);
-				//System.out.println("[ÁÁ¾Æ¿ä ¿©ºÎ È®ÀÎ - 0] °Ô½Ã±Û ¹øÈ£ : " + post_Seq);
-				//System.out.println("[ÁÁ¾Æ¿ä ¿©ºÎ È®ÀÎ - 1] Setting Àü post_LikeYN = " + postlist.get(i).getPost_LikeYN());
+				//System.out.println("[ì¢‹ì•„ìš” ì—¬ë¶€ í™•ì¸ - 0] ê²Œì‹œê¸€ ë²ˆí˜¸ : " + post_Seq);
+				//System.out.println("[ì¢‹ì•„ìš” ì—¬ë¶€ í™•ì¸ - 1] Setting ì „ post_LikeYN = " + postlist.get(i).getPost_LikeYN());
 				String post_LikeYN = postService.getLikeYN(voForLikeYN);
 				postlist.get(i).setPost_LikeYN(post_LikeYN);
-				//System.out.println("[ÁÁ¾Æ¿ä ¿©ºÎ È®ÀÎ - 4] Setting ÈÄ post_LikeYN = " + postlist.get(i).getPost_LikeYN());
+				//System.out.println("[ì¢‹ì•„ìš” ì—¬ë¶€ í™•ì¸ - 4] Setting í›„ post_LikeYN = " + postlist.get(i).getPost_LikeYN());
 				
 			}
 			
-			// ÀüÃ¼ È¸¿ø ÇÁ·ÎÇÊ ÀÌ¹ÌÁö Á¶È¸
+			// ì „ì²´ íšŒì› í”„ë¡œí•„ ì´ë¯¸ì§€ ì¡°íšŒ
 			HashMap<String, String> profilemap = memberService.getMemberProfile();
-			//System.out.println("ÀüÃ¼ È¸¿ø ÇÁ·ÎÇÊ: " + profilemap);
+			//System.out.println("ì „ì²´ íšŒì› í”„ë¡œí•„: " + profilemap);
 			
 			model.addAttribute("profileMap", profilemap);
 			model.addAttribute("postList", postlist);
@@ -154,18 +154,18 @@ public class MainController {
 			return "index";
 		}
 	}
-	
-	// PEOPLE ÅÇ List °¡Á®¿À±â
+
+	// PEOPLE íƒ­ List ê°€ì ¸ì˜¤ê¸°
 	@GetMapping("/people_List")
 	public ResponseEntity<Map<String, Object>> people_List(HttpSession session, Model model) {
-		//System.out.println("[PEOPLE ÅÇ - 3] people_List GET MAPPINGÀ¸·Î ¿È");
+		//System.out.println("[PEOPLE íƒ­ - 3] people_List GET MAPPINGìœ¼ë¡œ ì˜´");
 	    String member_Id = ((MemberVO) session.getAttribute("loginUser")).getMember_Id();
 	    
 	    List<MemberVO> canFollow = memberService.getRecommendMember(member_Id);
-	    //System.out.println("[PEOPLE ÅÇ - 4] CAN FOLLOW LIST¸¦ ¹Ş¾Æ¿À±â ¼º°ø");
+	    //System.out.println("[PEOPLE íƒ­ - 4] CAN FOLLOW LISTë¥¼ ë°›ì•„ì˜¤ê¸° ì„±ê³µ");
 	    
 	    List<MemberVO> mostFamous = memberService.getMostFamousMember();
-	    //System.out.println("[PEOPLE ÅÇ - 7] MOST FAMOUS LIST¸¦ ¹Ş¾Æ¿À±â ¼º°ø");
+	    //System.out.println("[PEOPLE íƒ­ - 7] MOST FAMOUS LISTë¥¼ ë°›ì•„ì˜¤ê¸° ì„±ê³µ");
 	    
 	    Map<String, Object> responseData = new HashMap<>();
 	    responseData.put("canFollow", canFollow);
@@ -174,14 +174,14 @@ public class MainController {
 	    return ResponseEntity.ok(responseData);
 	}
 
-	// Profile ÀÌµ¿
+	// Profile ì´ë™
 	@GetMapping("/profile")
 	public String makeProfile(@RequestParam("member_Id") String member_Id, Model model, HttpSession session) {
-		//System.out.println("[ÇÁ·ÎÇÊ ÆäÀÌÁö - 1] GET MAPPINGÀ¸·Î MainController·Î ¿È. ÇÁ·ÎÇÊ ´ë»ó : " + member_Id);
+		//System.out.println("[í”„ë¡œí•„ í˜ì´ì§€ - 1] GET MAPPINGìœ¼ë¡œ MainControllerë¡œ ì˜´. í”„ë¡œí•„ ëŒ€ìƒ : " + member_Id);
 		MemberVO member = memberService.getMember(member_Id);
 		String loginUser_Id = ((MemberVO) session.getAttribute("loginUser")).getMember_Id();
 		
-		// ÆÈ·Î¿ö ÆÈ·Î¿ì ¼ıÀÚ ¹Ø¿¡ ÀÛÀº µ¿±×¶ó¹Ì ÀÌ¹ÌÁöµé Ã¤¿ï ¿ëµµ
+		// íŒ”ë¡œì›Œ íŒ”ë¡œìš° ìˆ«ì ë°‘ì— ì‘ì€ ë™ê·¸ë¼ë¯¸ ì´ë¯¸ì§€ë“¤ ì±„ìš¸ ìš©ë„
 		List<MemberVO> followers = memberService.getFollowers(member_Id);
 		int followers_Size = followers.size();
 		List<MemberVO> followings = memberService.getFollowings(member_Id);
@@ -191,22 +191,22 @@ public class MainController {
 		model.addAttribute("followings", followings);
 		model.addAttribute("followings_Size", followings_Size);
 		
-		// ³»°¡ ¾´ ±ÛÀ» postlist¿¡ ´ãÀ½
+		// ë‚´ê°€ ì“´ ê¸€ì„ postlistì— ë‹´ìŒ
 		ArrayList<PostVO> postlist = postService.getMemberPost(member_Id);
-		//System.out.println("[ÇÁ·ÎÇÊ ÆäÀÌÁö - 2] ÇØ´ç ¸â¹öÀÇ Á¤º¸¿Í ÀÛ¼ºÇÑ Æ÷½ºÆ®µéÀ» ´ã¾Æ¿È");		
+		//System.out.println("[í”„ë¡œí•„ í˜ì´ì§€ - 2] í•´ë‹¹ ë©¤ë²„ì˜ ì •ë³´ì™€ ì‘ì„±í•œ í¬ìŠ¤íŠ¸ë“¤ì„ ë‹´ì•„ì˜´");		
 		
-		// °¢ post_seq¿¡ ´ëÇÑ ´ñ±ÛµéÀ» ¸ÅÇÎÇÒ °ø°£.
+		// ê° post_seqì— ëŒ€í•œ ëŒ“ê¸€ë“¤ì„ ë§¤í•‘í•  ê³µê°„.
 		Map<Integer, ArrayList<ReplyVO>> replymap = new HashMap<>();
 				
-		// Á¤·ÄµÈ postlistÀÇ ÀÎµ¦½º ¼øÀ¸·Î ´ñ±Û ¸®½ºÆ®¸¦ ¸ÅÇÎÇÔ.
-		// µ¿½Ã¿¡ °¢ °Ô½Ã±ÛÀÇ ÁÁ¾Æ¿ä Ä«¿îÆ®¿Í ´ñ±Û Ä«¿îÆ®¸¦ ÀúÀå.
+		// ì •ë ¬ëœ postlistì˜ ì¸ë±ìŠ¤ ìˆœìœ¼ë¡œ ëŒ“ê¸€ ë¦¬ìŠ¤íŠ¸ë¥¼ ë§¤í•‘í•¨.
+		// ë™ì‹œì— ê° ê²Œì‹œê¸€ì˜ ì¢‹ì•„ìš” ì¹´ìš´íŠ¸ì™€ ëŒ“ê¸€ ì¹´ìš´íŠ¸ë¥¼ ì €ì¥.
 		for(int i = 0; i < postlist.size(); i++) {
 			
 			int post_Seq = postlist.get(i).getPost_Seq();
 			
-			// i¹øÂ° °Ô½Ã±ÛÀÇ ´ñ±Û ¸®½ºÆ®¸¦ ´ãÀ½
+			// ië²ˆì§¸ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ ë¦¬ìŠ¤íŠ¸ë¥¼ ë‹´ìŒ
 			ArrayList<ReplyVO> replylist = replyService.getReplyPreview(post_Seq);
-			// i¹øÂ° °Ô½Ã±ÛÀÇ ´ñ±Û ÁÁ¾Æ¿ä ¿©ºÎ Ã¼Å©
+			// ië²ˆì§¸ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ ì¢‹ì•„ìš” ì—¬ë¶€ ì²´í¬
 			for(int k = 0; k < replylist.size(); k++) {
 				ReplyVO voForReplyCheck = replylist.get(k);
 				String realReply_Member_Id = replylist.get(k).getMember_Id();
@@ -215,14 +215,14 @@ public class MainController {
 				replylist.get(k).setReply_LikeYN(reply_LikeYN);
 				replylist.get(k).setMember_Id(realReply_Member_Id);
 
-				//System.out.println("[ÇÁ·ÎÇÊ ÆäÀÌÁö - 3] ÇØ´ç ´ñ±Û ÁÁ¾Æ¿ä ´­·¶³ª Ã¼Å©µÊ");
+				//System.out.println("[í”„ë¡œí•„ í˜ì´ì§€ - 3] í•´ë‹¹ ëŒ“ê¸€ ì¢‹ì•„ìš” ëˆŒë €ë‚˜ ì²´í¬ë¨");
 			}
 			
-			// i¹øÂ°ÀÇ °Ô½Ã±ÛÀÇ ´ñ±ÛÀ» map¿¡ ¸ÅÇÎÇÏ´Â ÀÛ¾÷
+			// ië²ˆì§¸ì˜ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ì„ mapì— ë§¤í•‘í•˜ëŠ” ì‘ì—…
 			replymap.put(i, replylist);
-			//System.out.println("[ÇÁ·ÎÇÊ ÆäÀÌÁö - 4] °Ô½Ã±Û º° ´ñ±ÛÀ» ¸ÅÇÎÇÔ");		
+			//System.out.println("[í”„ë¡œí•„ í˜ì´ì§€ - 4] ê²Œì‹œê¸€ ë³„ ëŒ“ê¸€ì„ ë§¤í•‘í•¨");		
 			
-			// i¹øÂ° °Ô½Ã±ÛÀÇ ÁÁ¾Æ¿ä ¿©ºÎ Ã¼Å©
+			// ië²ˆì§¸ ê²Œì‹œê¸€ì˜ ì¢‹ì•„ìš” ì—¬ë¶€ ì²´í¬
 			PostVO voForLikeYN = new PostVO();
 			voForLikeYN.setMember_Id(loginUser_Id);
 			voForLikeYN.setPost_Seq(post_Seq);
@@ -230,16 +230,16 @@ public class MainController {
 			int post_Like_Count = postService.getPost_Like_Count(post_Seq);
 			postlist.get(i).setPost_Like_Count(post_Like_Count);
 			postlist.get(i).setPost_LikeYN(post_LikeYN);
-			//System.out.println("[ÇÁ·ÎÇÊ ÆäÀÌÁö - 5] " + i + "¹øÂ° °Ô½Ã±Û ÁÁ¾Æ¿ä ´­·¶³ª Ã¼Å©µÊ : " + post_LikeYN);
+			//System.out.println("[í”„ë¡œí•„ í˜ì´ì§€ - 5] " + i + "ë²ˆì§¸ ê²Œì‹œê¸€ ì¢‹ì•„ìš” ëˆŒë €ë‚˜ ì²´í¬ë¨ : " + post_LikeYN);
 			
 		}
 		
-		// ÀüÃ¼ È¸¿ø ÇÁ·ÎÇÊ ÀÌ¹ÌÁö Á¶È¸
+		// ì „ì²´ íšŒì› í”„ë¡œí•„ ì´ë¯¸ì§€ ì¡°íšŒ
 		HashMap<String, String> profilemap = memberService.getMemberProfile();
-		//System.out.println("ÀüÃ¼ È¸¿ø ÇÁ·ÎÇÊ: " + profilemap);		
-		//System.out.println("[ÇÁ·ÎÇÊ ÆäÀÌÁö - 6] Ãâ·ÂÁØºñ¸¦ À§ÇÑ postvo ÁØºñ");
+		//System.out.println("ì „ì²´ íšŒì› í”„ë¡œí•„: " + profilemap);		
+		//System.out.println("[í”„ë¡œí•„ í˜ì´ì§€ - 6] ì¶œë ¥ì¤€ë¹„ë¥¼ ìœ„í•œ postvo ì¤€ë¹„");
 		
-		// È­¸é ¿ìÃø Hottest Feed
+		// í™”ë©´ ìš°ì¸¡ Hottest Feed
 		List<PostVO> hottestFeed = postService.getHottestFeed();
 		
 		model.addAttribute("member", member);
@@ -253,59 +253,59 @@ public class MainController {
 	@GetMapping("trending_List")
 	public ResponseEntity<Map<String, Object>> trending_List(HttpSession session, Model model) {
 	      
-		//System.out.println("[¸â¹öÃßÃµ - 1] ·Î±×ÀÎ ÈÄ trending_List ¿äÃ»ÇÏ¸é GetMappingÀ¸·Î Àâ¾Æ¿À°í ¼¼¼ÇÀÇ loginUser¿¡¼­ Id »Ì¾Æ¼­ member_Id¿¡ ÀúÀå");
+		//System.out.println("[ë©¤ë²„ì¶”ì²œ - 1] ë¡œê·¸ì¸ í›„ trending_List ìš”ì²­í•˜ë©´ GetMappingìœ¼ë¡œ ì¡ì•„ì˜¤ê³  ì„¸ì…˜ì˜ loginUserì—ì„œ Id ë½‘ì•„ì„œ member_Idì— ì €ì¥");
 	    String member_Id = ((MemberVO) session.getAttribute("loginUser")).getMember_Id();
 	      
-	    //System.out.println("[ÀÎ±â±Û - 1] index¿¡¼­ tranding tab¿äÃ»ÇÏ¸é js°¡ Àâ¾Æ¼­ ´øÁü  GetMappingÀ¸·Î Àâ¾Æ¿È");
-	    //System.out.println("[ÀÎ±â±Û - 2] postService¿¡ getHottestFeed ¿äÃ»");
+	    //System.out.println("[ì¸ê¸°ê¸€ - 1] indexì—ì„œ tranding tabìš”ì²­í•˜ë©´ jsê°€ ì¡ì•„ì„œ ë˜ì§  GetMappingìœ¼ë¡œ ì¡ì•„ì˜´");
+	    //System.out.println("[ì¸ê¸°ê¸€ - 2] postServiceì— getHottestFeed ìš”ì²­");
 	    List<PostVO> hottestFeed = postService.getHottestFeed();
-	    //System.out.println("[ÀÎ±â±Û - 5] DAO¿¡¼­ hottestFeed ¹Ş¾Æ¿Í¼­ List¿¡ ÀúÀåÇÏ°í model¿¡ ¿Ã¸²");
+	    //System.out.println("[ì¸ê¸°ê¸€ - 5] DAOì—ì„œ hottestFeed ë°›ì•„ì™€ì„œ Listì— ì €ì¥í•˜ê³  modelì— ì˜¬ë¦¼");
 	       
-	    // °¢ post_seq¿¡ ´ëÇÑ ´ñ±ÛµéÀ» ¸ÅÇÎÇÒ °ø°£.
+	    // ê° post_seqì— ëŒ€í•œ ëŒ“ê¸€ë“¤ì„ ë§¤í•‘í•  ê³µê°„.
 	    Map<Integer, ArrayList<ReplyVO>> replymap = new HashMap<>();
 	      
-	    // Á¤·ÄµÈ postlistÀÇ ÀÎµ¦½º ¼øÀ¸·Î ´ñ±Û ¸®½ºÆ®¸¦ ¸ÅÇÎÇÔ.
-	    // µ¿½Ã¿¡ °¢ °Ô½Ã±ÛÀÇ ÁÁ¾Æ¿ä Ä«¿îÆ®¿Í ´ñ±Û Ä«¿îÆ®¸¦ ÀúÀå.
+	    // ì •ë ¬ëœ postlistì˜ ì¸ë±ìŠ¤ ìˆœìœ¼ë¡œ ëŒ“ê¸€ ë¦¬ìŠ¤íŠ¸ë¥¼ ë§¤í•‘í•¨.
+	    // ë™ì‹œì— ê° ê²Œì‹œê¸€ì˜ ì¢‹ì•„ìš” ì¹´ìš´íŠ¸ì™€ ëŒ“ê¸€ ì¹´ìš´íŠ¸ë¥¼ ì €ì¥.
 	    for(int i=0; i<hottestFeed.size(); i++) {
-	        // ÀÚ½Å, ÆÈ·ÎÀ×ÇÑ »ç¶÷µéÀÇ °Ô½Ã±ÛÀÇ post_seq¸¦ ºÒ·¯¿Â´Ù.
+	        // ìì‹ , íŒ”ë¡œì‰í•œ ì‚¬ëŒë“¤ì˜ ê²Œì‹œê¸€ì˜ post_seqë¥¼ ë¶ˆëŸ¬ì˜¨ë‹¤.
 	        int post_Seq = hottestFeed.get(i).getPost_Seq();
 	        
-	        // i¹øÂ° °Ô½Ã±ÛÀÇ ´ñ±Û ¸®½ºÆ®¸¦ ´ãÀ½
+	        // ië²ˆì§¸ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ ë¦¬ìŠ¤íŠ¸ë¥¼ ë‹´ìŒ
 	        ArrayList<ReplyVO> replylist = replyService.getReplyPreview(post_Seq);
-	        // System.out.println("replylist·Î ´ãÀ½");
-	        // System.out.println("[¹Ì¸®º¸±â ´ñ±Û - 1] replylist¿¡ ÇØ´ç °Ô½Ã±ÛÀÇ ´ñ±Û 3°³¸¦ °¡Á®¿È / ¾ÆÁ÷ ÇØ´ç ´ñ±Û ÁÁ¾Æ¿ä ´­·¶³ª Ã¼Å©´Â ¾ÈµÊ");
-	        // System.out.println("[¹Ì¸®º¸±â ´ñ±Û - 1.5] replylist size : " + replylist.size());
-	        // i¹øÂ° °Ô½Ã±ÛÀÇ ´ñ±Û ÁÁ¾Æ¿ä ¿©ºÎ Ã¼Å©
+	        // System.out.println("replylistë¡œ ë‹´ìŒ");
+	        // System.out.println("[ë¯¸ë¦¬ë³´ê¸° ëŒ“ê¸€ - 1] replylistì— í•´ë‹¹ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ 3ê°œë¥¼ ê°€ì ¸ì˜´ / ì•„ì§ í•´ë‹¹ ëŒ“ê¸€ ì¢‹ì•„ìš” ëˆŒë €ë‚˜ ì²´í¬ëŠ” ì•ˆë¨");
+	        // System.out.println("[ë¯¸ë¦¬ë³´ê¸° ëŒ“ê¸€ - 1.5] replylist size : " + replylist.size());
+	        // ië²ˆì§¸ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ ì¢‹ì•„ìš” ì—¬ë¶€ ì²´í¬
 	        for(int k = 0; k < replylist.size(); k++) {
 	            ReplyVO voForReplyCheck = replylist.get(k);
 	            String realReply_Member_Id = replylist.get(k).getMember_Id();
 	            voForReplyCheck.setMember_Id(member_Id);
-	            //  System.out.println("[¹Ì¸®º¸±â ´ñ±Û - 2] ´ñ±Û ÁÁ¾Æ¿ä ´­·¶³ª È®ÀÎÇÏ·¯ º¸³¿");            
+	            //  System.out.println("[ë¯¸ë¦¬ë³´ê¸° ëŒ“ê¸€ - 2] ëŒ“ê¸€ ì¢‹ì•„ìš” ëˆŒë €ë‚˜ í™•ì¸í•˜ëŸ¬ ë³´ëƒ„");            
 	            String reply_LikeYN = replyService.getCheckReplyLike(voForReplyCheck);
 	            replylist.get(k).setReply_LikeYN(reply_LikeYN);
-	            // System.out.println("[¹Ì¸®º¸±â ´ñ±Û - 5] DAO¿¡¼­ ¸®ÅÏ¹Ş¾Æ¼­ setÇØÁÜ. ÇØ´ç ´ñ±Û ÁÁ¾Æ¿ä ´©¸§ ? " + replylist.get(k).getReply_LikeYN());
+	            // System.out.println("[ë¯¸ë¦¬ë³´ê¸° ëŒ“ê¸€ - 5] DAOì—ì„œ ë¦¬í„´ë°›ì•„ì„œ setí•´ì¤Œ. í•´ë‹¹ ëŒ“ê¸€ ì¢‹ì•„ìš” ëˆ„ë¦„ ? " + replylist.get(k).getReply_LikeYN());
 	            replylist.get(k).setMember_Id(realReply_Member_Id);
 	        }
 	         
-	        // i¹øÂ°ÀÇ °Ô½Ã±ÛÀÇ ´ñ±ÛÀ» map¿¡ ¸ÅÇÎÇÏ´Â ÀÛ¾÷
+	        // ië²ˆì§¸ì˜ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ì„ mapì— ë§¤í•‘í•˜ëŠ” ì‘ì—…
 	        replymap.put(i, replylist);
-	        // System.out.println(i + "¹øÂ° °Ô½Ã±Û ´ñ±Û ¿©ºÎ" + replymap.get(i));         
+	        // System.out.println(i + "ë²ˆì§¸ ê²Œì‹œê¸€ ëŒ“ê¸€ ì—¬ë¶€" + replymap.get(i));         
 	        
-	        // i¹øÂ° °Ô½Ã±ÛÀÇ ÁÁ¾Æ¿ä ¿©ºÎ Ã¼Å©
+	        // ië²ˆì§¸ ê²Œì‹œê¸€ì˜ ì¢‹ì•„ìš” ì—¬ë¶€ ì²´í¬
 	        PostVO voForLikeYN = new PostVO();
 	        voForLikeYN.setMember_Id(member_Id);
 	        voForLikeYN.setPost_Seq(post_Seq);
-	        //  System.out.println("[ÁÁ¾Æ¿ä ¿©ºÎ È®ÀÎ - 0] °Ô½Ã±Û ¹øÈ£ : " + post_Seq);
-	        //  System.out.println("[ÁÁ¾Æ¿ä ¿©ºÎ È®ÀÎ - 1] Setting Àü post_LikeYN = " + hottestFeed.get(i).getPost_LikeYN());
+	        //  System.out.println("[ì¢‹ì•„ìš” ì—¬ë¶€ í™•ì¸ - 0] ê²Œì‹œê¸€ ë²ˆí˜¸ : " + post_Seq);
+	        //  System.out.println("[ì¢‹ì•„ìš” ì—¬ë¶€ í™•ì¸ - 1] Setting ì „ post_LikeYN = " + hottestFeed.get(i).getPost_LikeYN());
 	        String post_LikeYN = postService.getLikeYN(voForLikeYN);
 	        hottestFeed.get(i).setPost_LikeYN(post_LikeYN);
-	        //  System.out.println("[ÁÁ¾Æ¿ä ¿©ºÎ È®ÀÎ - 4] Setting ÈÄ post_LikeYN = " + hottestFeed.get(i).getPost_LikeYN());
+	        //  System.out.println("[ì¢‹ì•„ìš” ì—¬ë¶€ í™•ì¸ - 4] Setting í›„ post_LikeYN = " + hottestFeed.get(i).getPost_LikeYN());
 	    }
 	      	      
-	    // ÀüÃ¼ È¸¿ø ÇÁ·ÎÇÊ ÀÌ¹ÌÁö Á¶È¸
+	    // ì „ì²´ íšŒì› í”„ë¡œí•„ ì´ë¯¸ì§€ ì¡°íšŒ
 	    HashMap<String, String> profilemap = memberService.getMemberProfile();
 	     
-	    //System.out.println("ÀüÃ¼ È¸¿ø ÇÁ·ÎÇÊ: " + profilemap);
+	    //System.out.println("ì „ì²´ íšŒì› í”„ë¡œí•„: " + profilemap);
 	      
 	    Map<String, Object> responseData = new HashMap<>();
 	      
@@ -324,13 +324,13 @@ public class MainController {
 		String member_Id = ((MemberVO) session.getAttribute("loginUser")).getMember_Id();
 		
 		if(session.getAttribute("loginUser") == null) {
-			model.addAttribute("message", "·Î±×ÀÎÀ» ÇØÁÖ¼¼¿ä");
+			model.addAttribute("message", "ë¡œê·¸ì¸ì„ í•´ì£¼ì„¸ìš”");
 			return "login";
 		} else {
-			// ¿ìÃø Hottest Feed
+			// ìš°ì¸¡ Hottest Feed
 			List<PostVO> hottestFeed = postService.getHottestFeed();
 			model.addAttribute("hottestFeed", hottestFeed);
-		    // ³»°¡ ÀÛ¼ºÇÑ qna
+		    // ë‚´ê°€ ì‘ì„±í•œ qna
 			List<QnaVO> qnaList = qnaService.getMyQna(member_Id);
 			model.addAttribute("qnaList", qnaList);
 			return "contact";
@@ -341,7 +341,7 @@ public class MainController {
 	public String qnaSending(@ModelAttribute("contactForm") QnaVO vo, HttpSession session, Model model) {
 		
 		if(session.getAttribute("loginUser") == null) {
-			model.addAttribute("message", "·Î±×ÀÎÀ» ÇØÁÖ¼¼¿ä");
+			model.addAttribute("message", "ë¡œê·¸ì¸ì„ í•´ì£¼ì„¸ìš”");
 			return "login";
 		} else {
 			qnaService.insertQna(vo);
@@ -349,65 +349,66 @@ public class MainController {
 			return "redirect:contact";
 		}
 	}
-	// index ÆäÀÌÁö ·Îµå
+  
+	// index í˜ì´ì§€ ë¡œë“œ
 	@GetMapping("/feedInfinite")
 	public ResponseEntity<Map<String, Object>> feedInfinite(Model model, HttpSession session) {
 
 			String member_Id = ((MemberVO) session.getAttribute("loginUser")).getMember_Id();
 
-									/* indexÆäÀÌÁöÀÇ ´º½ºÇÇµå ºÎºĞ */
-			// ÀÚ½Å, ÆÈ·ÎÀ×ÇÑ »ç¶÷µéÀÇ °Ô½Ã±ÛÀ» ´ã´ÂºÎºĞ
+									/* indexí˜ì´ì§€ì˜ ë‰´ìŠ¤í”¼ë“œ ë¶€ë¶„ */
+			// ìì‹ , íŒ”ë¡œì‰í•œ ì‚¬ëŒë“¤ì˜ ê²Œì‹œê¸€ì„ ë‹´ëŠ”ë¶€ë¶„
 			ArrayList<PostVO> postlist = postService.getlistPost(member_Id);
 
 			System.out.println(postlist.get(0).getMember_Id());
-			System.out.println("°Ô½Ã±Û " + postlist.size() + "°³ ºÒ·¯¿È");
+			System.out.println("ê²Œì‹œê¸€ " + postlist.size() + "ê°œ ë¶ˆëŸ¬ì˜´");
 
-			// °¢ post_seq¿¡ ´ëÇÑ ´ñ±ÛµéÀ» ¸ÅÇÎÇÒ °ø°£.
+			// ê° post_seqì— ëŒ€í•œ ëŒ“ê¸€ë“¤ì„ ë§¤í•‘í•  ê³µê°„.
 			Map<Integer, ArrayList<ReplyVO>> replymap = new HashMap<>();
 
-			// Á¤·ÄµÈ postlistÀÇ ÀÎµ¦½º ¼øÀ¸·Î ´ñ±Û ¸®½ºÆ®¸¦ ¸ÅÇÎÇÔ.
-			// µ¿½Ã¿¡ °¢ °Ô½Ã±ÛÀÇ ÁÁ¾Æ¿ä Ä«¿îÆ®¿Í ´ñ±Û Ä«¿îÆ®¸¦ ÀúÀå.
+			// ì •ë ¬ëœ postlistì˜ ì¸ë±ìŠ¤ ìˆœìœ¼ë¡œ ëŒ“ê¸€ ë¦¬ìŠ¤íŠ¸ë¥¼ ë§¤í•‘í•¨.
+			// ë™ì‹œì— ê° ê²Œì‹œê¸€ì˜ ì¢‹ì•„ìš” ì¹´ìš´íŠ¸ì™€ ëŒ“ê¸€ ì¹´ìš´íŠ¸ë¥¼ ì €ì¥.
 			for(int i=0; i<postlist.size(); i++) {
-				// ÀÚ½Å, ÆÈ·ÎÀ×ÇÑ »ç¶÷µéÀÇ °Ô½Ã±ÛÀÇ post_seq¸¦ ºÒ·¯¿Â´Ù.
+				// ìì‹ , íŒ”ë¡œì‰í•œ ì‚¬ëŒë“¤ì˜ ê²Œì‹œê¸€ì˜ post_seqë¥¼ ë¶ˆëŸ¬ì˜¨ë‹¤.
 				int post_Seq = postlist.get(i).getPost_Seq();
 
-				// i¹øÂ° °Ô½Ã±ÛÀÇ ´ñ±Û ¸®½ºÆ®¸¦ ´ãÀ½
+				// ië²ˆì§¸ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ ë¦¬ìŠ¤íŠ¸ë¥¼ ë‹´ìŒ
 				ArrayList<ReplyVO> replylist = replyService.getReplyPreview(post_Seq);
-				//System.out.println("replylist·Î ´ãÀ½");
-				//System.out.println("[¹Ì¸®º¸±â ´ñ±Û - 1] replylist¿¡ ÇØ´ç °Ô½Ã±ÛÀÇ ´ñ±Û 3°³¸¦ °¡Á®¿È / ¾ÆÁ÷ ÇØ´ç ´ñ±Û ÁÁ¾Æ¿ä ´­·¶³ª Ã¼Å©´Â ¾ÈµÊ");
-				//System.out.println("[¹Ì¸®º¸±â ´ñ±Û - 1.5] replylist size : " + replylist.size());
-				// i¹øÂ° °Ô½Ã±ÛÀÇ ´ñ±Û ÁÁ¾Æ¿ä ¿©ºÎ Ã¼Å©
+				//System.out.println("replylistë¡œ ë‹´ìŒ");
+				//System.out.println("[ë¯¸ë¦¬ë³´ê¸° ëŒ“ê¸€ - 1] replylistì— í•´ë‹¹ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ 3ê°œë¥¼ ê°€ì ¸ì˜´ / ì•„ì§ í•´ë‹¹ ëŒ“ê¸€ ì¢‹ì•„ìš” ëˆŒë €ë‚˜ ì²´í¬ëŠ” ì•ˆë¨");
+				//System.out.println("[ë¯¸ë¦¬ë³´ê¸° ëŒ“ê¸€ - 1.5] replylist size : " + replylist.size());
+				// ië²ˆì§¸ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ ì¢‹ì•„ìš” ì—¬ë¶€ ì²´í¬
 				for(int k = 0; k < replylist.size(); k++) {
 					ReplyVO voForReplyCheck = replylist.get(k);
 					String realReply_Member_Id = replylist.get(k).getMember_Id();
 					voForReplyCheck.setMember_Id(member_Id);
-					//System.out.println("[¹Ì¸®º¸±â ´ñ±Û - 2] ´ñ±Û ÁÁ¾Æ¿ä ´­·¶³ª È®ÀÎÇÏ·¯ º¸³¿");				
+					//System.out.println("[ë¯¸ë¦¬ë³´ê¸° ëŒ“ê¸€ - 2] ëŒ“ê¸€ ì¢‹ì•„ìš” ëˆŒë €ë‚˜ í™•ì¸í•˜ëŸ¬ ë³´ëƒ„");				
 					String reply_LikeYN = replyService.getCheckReplyLike(voForReplyCheck);
 					replylist.get(k).setReply_LikeYN(reply_LikeYN);
-					//System.out.println("[¹Ì¸®º¸±â ´ñ±Û - 5] DAO¿¡¼­ ¸®ÅÏ¹Ş¾Æ¼­ setÇØÁÜ. ÇØ´ç ´ñ±Û ÁÁ¾Æ¿ä ´©¸§ ? " + replylist.get(k).getReply_LikeYN());
+					//System.out.println("[ë¯¸ë¦¬ë³´ê¸° ëŒ“ê¸€ - 5] DAOì—ì„œ ë¦¬í„´ë°›ì•„ì„œ setí•´ì¤Œ. í•´ë‹¹ ëŒ“ê¸€ ì¢‹ì•„ìš” ëˆ„ë¦„ ? " + replylist.get(k).getReply_LikeYN());
 					replylist.get(k).setMember_Id(realReply_Member_Id);
 				}
 
-				// i¹øÂ°ÀÇ °Ô½Ã±ÛÀÇ ´ñ±ÛÀ» map¿¡ ¸ÅÇÎÇÏ´Â ÀÛ¾÷
+				// ië²ˆì§¸ì˜ ê²Œì‹œê¸€ì˜ ëŒ“ê¸€ì„ mapì— ë§¤í•‘í•˜ëŠ” ì‘ì—…
 				replymap.put(i, replylist);
-				//System.out.println(i + "¹øÂ° °Ô½Ã±Û ´ñ±Û ¿©ºÎ" + replymap.get(i));			
+				//System.out.println(i + "ë²ˆì§¸ ê²Œì‹œê¸€ ëŒ“ê¸€ ì—¬ë¶€" + replymap.get(i));			
 
-				// i¹øÂ° °Ô½Ã±ÛÀÇ ÁÁ¾Æ¿ä ¿©ºÎ Ã¼Å©
+				// ië²ˆì§¸ ê²Œì‹œê¸€ì˜ ì¢‹ì•„ìš” ì—¬ë¶€ ì²´í¬
 				PostVO voForLikeYN = new PostVO();
 				voForLikeYN.setMember_Id(member_Id);
 				voForLikeYN.setPost_Seq(post_Seq);
-				//System.out.println("[ÁÁ¾Æ¿ä ¿©ºÎ È®ÀÎ - 0] °Ô½Ã±Û ¹øÈ£ : " + post_Seq);
-				//System.out.println("[ÁÁ¾Æ¿ä ¿©ºÎ È®ÀÎ - 1] Setting Àü post_LikeYN = " + postlist.get(i).getPost_LikeYN());
+				//System.out.println("[ì¢‹ì•„ìš” ì—¬ë¶€ í™•ì¸ - 0] ê²Œì‹œê¸€ ë²ˆí˜¸ : " + post_Seq);
+				//System.out.println("[ì¢‹ì•„ìš” ì—¬ë¶€ í™•ì¸ - 1] Setting ì „ post_LikeYN = " + postlist.get(i).getPost_LikeYN());
 				String post_LikeYN = postService.getLikeYN(voForLikeYN);
 				postlist.get(i).setPost_LikeYN(post_LikeYN);
-				//System.out.println("[ÁÁ¾Æ¿ä ¿©ºÎ È®ÀÎ - 4] Setting ÈÄ post_LikeYN = " + postlist.get(i).getPost_LikeYN());
+				//System.out.println("[ì¢‹ì•„ìš” ì—¬ë¶€ í™•ì¸ - 4] Setting í›„ post_LikeYN = " + postlist.get(i).getPost_LikeYN());
 
 			}
 
 
-			// ÀüÃ¼ È¸¿ø ÇÁ·ÎÇÊ ÀÌ¹ÌÁö Á¶È¸
+			// ì „ì²´ íšŒì› í”„ë¡œí•„ ì´ë¯¸ì§€ ì¡°íšŒ
 			HashMap<String, String> profilemap = memberService.getMemberProfile();
-			//System.out.println("ÀüÃ¼ È¸¿ø ÇÁ·ÎÇÊ: " + profilemap);
+			//System.out.println("ì „ì²´ íšŒì› í”„ë¡œí•„: " + profilemap);
 
 			Map<String, Object> responseData = new HashMap<>();
 

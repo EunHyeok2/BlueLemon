@@ -262,13 +262,16 @@
                               <div id="loadingStop"></div>           
 		                         <!-- 피드무한스크롤 -->
 		                         <div class="text-center mt-4" id="feedInfinity">
-								    <div class="spinner-border" role="status">
-									   <span class="visually-hidden">Loading...</span>
-									</div>
-									<p class="mb-0 mt-2">Loading</p>
+                                <div class="spinner-border" role="status">
+                                 <span class="visually-hidden">Loading...</span>
+                              </div>
+									            <p class="mb-0 mt-2">Loading</p>
 		                  		</div>                                           
                            </div>
                         </div><!-- 뉴스피드 부분 -->
+                        
+                       
+                        
                         
                         <!-- people 탭 클릭시 -->                        
                         <div class="tab-pane fade" id="pills-people" role="tabpanel" aria-labelledby="pills-people-tab">
