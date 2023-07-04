@@ -39,6 +39,22 @@
 	  <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
    </head>
    
+   <script>
+		
+		function autolink(id) {
+		
+		        var container = document.getElementById(id);
+		
+		        var doc = container.innerHTML;
+		
+		        var regURL = new RegExp("(http|https|ftp|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)","gi");
+		
+		        var regEmail = new RegExp("([xA1-xFEa-z0-9_-]+@[xA1-xFEa-z0-9-]+\.[a-z0-9-]+)","gi");
+		
+		        container.innerHTML = doc.replace(regURL,"<a href='$1://$2' target='_blank'>$1://$2</a>").replace(regEmail,"<a href='mailto:$1'>$1</a>");
+		
+		}
+	</script>
 
    <!-- body부분의 class : light모드, dark모드 버튼 -->
    <body class="bg-light" style="display: flex; flex-direction: column;">
@@ -199,9 +215,12 @@
                                                 </a>
                                                 <br>
                                              	<!-- 게시글 내용 -->                                        
-                                                <p class="text-dark">${postVO.post_Content}</p>
+                                                <p class="text-dark" id="postContent${postVO.post_Seq}">${postVO.post_Content}</p>
                                                 <br>
-                                                
+                                                <script type="text/javascript">
+                                                var postseq = "${postVO.post_Seq}";
+                                                autolink('postContent'+postseq);
+                                                </script>
                                                 <!-- 해시태그 -->
                                                 <c:forEach var="hash" items="${hashMap[postVO.post_Seq]}">
 	                                                <a id="hash" href="search_HashTag?tag_Content=${hash.tag_Content}" class="mb-3 text-primary">#${hash.tag_Content}</a>&nbsp;&nbsp;
