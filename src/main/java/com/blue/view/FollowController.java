@@ -177,6 +177,8 @@ public class FollowController {
 			model.addAttribute("hottestFeed", hottestFeed);	
 			
 			model.addAttribute("profileImage", profileImage);
+			
+			model.addAttribute("member_Id", member_Id);
 
 			
 			model.addAttribute("alarmList", alarmList);
@@ -221,15 +223,16 @@ public class FollowController {
 
 	@PostMapping("/moreLoadFollowing")
 	@ResponseBody
-	public Map<String, Object> moreLoadFollwing(@RequestBody Map<String, Integer> requestBody, HttpSession session) {
+	public Map<String, Object> moreLoadFollwing(@RequestBody Map<String, String> requestBody, HttpSession session) {
 		
 
 		// 0. ajax요청에 대한 response값 전달을 위한 Map 변수 선언
 		Map<String, Object> dataMap = new HashMap<>();
 		
 		// 1. ajax에서 받아온 객체 받아놓기
-		int followingTotalPageNum = requestBody.get("followingTotalPageNum");
-	    int followingPageNum = requestBody.get("followingPageNum");
+		int followingTotalPageNum = Integer.parseInt(requestBody.get("followingTotalPageNum"));
+	    int followingPageNum = Integer.parseInt(requestBody.get("followingPageNum"));
+	    String member_Id = requestBody.get("member_Id");
 		
 		
 	    //[팔로우, 언팔로우 - 3] PostMapping으로 /moreLoadFollwing 잡아옴, 총 페이지 수 : followerTotalPageNum
@@ -253,7 +256,7 @@ public class FollowController {
 		
 		FollowVO followVo = new FollowVO();
 		
-		followVo.setFollower(sessionId);
+		followVo.setFollower(member_Id);
 		followVo.setFollowingLocalPageFirstNum(LocalPageFirstNum);
 		followVo.setFollowingLocalPageLastNum(LocalPageLastNum);
 		
@@ -298,14 +301,15 @@ public class FollowController {
 	
 	@PostMapping("/moreLoadFollower")
 	@ResponseBody
-	public Map<String, Object> moreLoadFollwer(@RequestBody Map<String, Integer> requestBody, HttpSession session) {
+	public Map<String, Object> moreLoadFollwer(@RequestBody Map<String, String> requestBody, HttpSession session) {
 		
 		// 0. ajax요청에 대한 response값 전달을 위한 Map 변수 선언
 		Map<String, Object> dataMap = new HashMap<>();
 		
 		// 1. ajax에서 받아온 객체 받아놓기
-		int followerTotalPageNum = requestBody.get("followerTotalPageNum");
-	    int followerPageNum = requestBody.get("followerPageNum");
+		int followerTotalPageNum = Integer.parseInt(requestBody.get("followingTotalPageNum"));
+	    int followerPageNum = Integer.parseInt(requestBody.get("followingPageNum"));
+	    String member_Id = requestBody.get("member_Id");
 	    
 	    //System.out.println("토탈 페이지 넘버 : " + followerTotalPageNum);
 	    //System.out.println("현재 페이지 넘버 : " + followerPageNum);
@@ -331,7 +335,7 @@ public class FollowController {
 		
 		FollowVO followVo = new FollowVO();
 		
-		followVo.setFollowing(sessionId);
+		followVo.setFollowing(member_Id);
 		followVo.setFollowerLocalPageFirstNum(LocalPageFirstNum);
 		followVo.setFollowerLocalPageLastNum(LocalPageLastNum);
 		
@@ -416,9 +420,9 @@ public class FollowController {
 	    	}
 			
 			//System.out.println("세션값 존재");			
-			List<FollowVO> following_Id = followService.getFollowing(member_Id);			
-			List<FollowVO> follower_Id = followService.getFollower(member_Id);			
-			List<MemberVO> following_info = new ArrayList<MemberVO>();			
+			List<FollowVO> following_Id = followService.getFollowing(member_Id);
+			List<FollowVO> follower_Id = followService.getFollower(member_Id);
+			List<MemberVO> following_info = new ArrayList<MemberVO>();
 			List<MemberVO> follower_info = new ArrayList<MemberVO>();
 			
 			for(FollowVO id : following_Id) {

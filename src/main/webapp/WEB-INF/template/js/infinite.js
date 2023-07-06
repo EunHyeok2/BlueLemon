@@ -2,16 +2,31 @@
  *  인피니트 스크롤을 구현하기 위한 js
  */
 
+function autolink(id) {
+		
+		        var container = document.getElementById(id);
+		
+		        var doc = container.innerHTML;
+		
+		        var regURL = new RegExp("(http|https|ftp|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)","gi");
+		
+		        var regEmail = new RegExp("([xA1-xFEa-z0-9_-]+@[xA1-xFEa-z0-9-]+\.[a-z0-9-]+)","gi");
+		
+		        container.innerHTML = doc.replace(regURL,"<a href='$1://$2' target='_blank'>$1://$2</a>").replace(regEmail,"<a href='mailto:$1'>$1</a>");
+		
+		}
+
 var trendpageNum = 0;
 
-function followingload(followingTotalPageNum, followingPageNum){
+function followingload(followingTotalPageNum, followingPageNum, member_Id){
 	
 	var followingTotalPageNum = followingTotalPageNum
 	
 	// 요청 바디에 전송할 데이터 설정
     var data = {
     	followingTotalPageNum : followingTotalPageNum,
-    	followingPageNum : followingPageNum
+    	followingPageNum : followingPageNum,
+    	member_Id : member_Id
     };
 
 	$.ajax({
@@ -23,8 +38,6 @@ function followingload(followingTotalPageNum, followingPageNum){
 
 	    success: function (response) {
 	      
-	     console.log(response);
-	     
 	  // 데이터 맵에서 값 가져오기
 	      var following_info = response.following_info;
 	      var following_size = response.following_size;
@@ -37,7 +50,7 @@ function followingload(followingTotalPageNum, followingPageNum){
 	      // following_info를 순회하며 HTML 생성
 	      for (var i = 0; i < following_size; i++) {
 	        var memberVO = following_info[i];
-	        html += '<a href="profile" class="p-3 d-flex text-dark text-decoration-none account-item pf-item">';
+	        html += '<a href="profile?member_Id='+ memberVO.member_Id +'" class="p-3 d-flex text-dark text-decoration-none account-item pf-item">';
 	        html += '<img src="img/uploads/profile/' + memberVO.member_Profile_Image + '" class="img-fluid rounded-circle me-3" alt="profile-img">';	        html += '<div>';
 	        html += '<p class="fw-bold mb-0 pe-3 d-flex align-items-center">' + memberVO.member_Id + '</p>'
 	        html += '<div>';
@@ -81,22 +94,19 @@ function followingload(followingTotalPageNum, followingPageNum){
 	  });
 	}
 
-function followerload(followerTotalPageNum, followerPageNum) {
+function followerload(followerTotalPageNum, followerPageNum, member_Id) {
 	  var data = {
 	    followerTotalPageNum: followerTotalPageNum,
-	    followerPageNum: followerPageNum
+	    followerPageNum: followerPageNum,
+	    member_Id: member_Id
 	  };
-
-	  console.log(followerTotalPageNum);
-	  console.log(followerPageNum);
-	  console.log(data);
-
+debugger;
 	  $.ajax({
 	    url: "/blue/moreLoadFollower",
 	    type: "POST",
 	    dataType: "json",
 	    contentType: "application/json",
-	    data: JSON.stringify(data),
+	    data: data,
 
 	    success: function (response) {
 	      
@@ -118,7 +128,8 @@ function followerload(followerTotalPageNum, followerPageNum) {
 	      // follower_info를 순회하며 HTML 생성
 	      for (var i = 0; i < follower_size; i++) {
 	        var memberVO = follower_info[i];
-	        html += '<a href="profile" class="p-3 d-flex text-dark text-decoration-none account-item pf-item">';
+
+	        html += '<a href="profile?member_Id='+ memberVO.member_Id +'"  class="p-3 d-flex text-dark text-decoration-none account-item pf-item">';
 	        html += '<img src="img/uploads/profile/' + memberVO.member_Profile_Image + '" class="img-fluid rounded-circle me-3" alt="profile-img">';	        html += '<div>';
 	        html += '<p class="fw-bold mb-0 pe-3 d-flex align-items-center">' + memberVO.member_Id + '</p>';
 	        html += '<div>';
@@ -296,12 +307,9 @@ $.ajax({
                html += '            <div class="my-2">';
                html += '               <p class="text-dark" id="postContent'+PostVO.post_Seq+'">' + PostVO.post_Content + '</p>';
                html += '               <br>';
-               html += '<script>';
-               html += 'autolink(\'postContent\''+PostVO.post_Seq+');';
-               html += '</script>';
                
                html += '               <a id="openModalBtn" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#commentModal" onclick="modalseq(' + PostVO.post_Seq + ')">';
-
+               
 
                if(PostVO.post_Image_Count == 0){
                	html += '                        <br>';
@@ -418,13 +426,16 @@ $.ajax({
 
 
                feed.innerHTML += html;
+               
+               autolink('postContent'+PostVO.post_Seq);
+               
                html = "";
 
-
-
+               
 
 
            }
+           
 
        } else {
            var feed_loading = document.getElementById("feedInfinity");
@@ -665,6 +676,7 @@ $.ajax({
                 
 
                 feed.innerHTML += html;
+                autolink('postContent'+PostVO.post_Seq);
                 html = "";
                 
                 

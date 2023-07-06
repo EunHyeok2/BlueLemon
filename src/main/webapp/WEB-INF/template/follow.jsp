@@ -120,7 +120,7 @@
 			                         	</c:when>
 			                         	<c:otherwise>
 							                <div class="ms-auto" align="center">
-		                                    	<span class="btn btn-outline-primary btn-sm px-3 rounded-pill" id="followingload" onclick="followingload(${followingTotalPageNum}, ${followingPageNum})">+ 더보기</span>
+		                                    	<span class="btn btn-outline-primary btn-sm px-3 rounded-pill" id="followingload" onclick="followingload(${followingTotalPageNum}, ${followingPageNum}, '${member_Id}')">+ 더보기</span>
 		                                	</div>
 			                         	</c:otherwise>
 		                         </c:choose>
@@ -177,7 +177,7 @@
 		                         	</c:when>
 		                         	<c:otherwise>
 			                         	<div class="ms-auto" align="center">
-	                                    	<span class="btn btn-outline-primary btn-sm px-3 rounded-pill" id="followerload" onclick="followerload(${followerTotalPageNum}, ${followerPageNum})">+ 더보기</span>
+	                                    	<span class="btn btn-outline-primary btn-sm px-3 rounded-pill" id="followerload" onclick="followerload(${followerTotalPageNum}, ${followerPageNum}, '${member_Id}')">+ 더보기</span>
 	                                	</div>
 		                         	</c:otherwise>
 		                         </c:choose>	
