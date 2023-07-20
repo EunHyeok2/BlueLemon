@@ -558,7 +558,7 @@
 									               				<br><div style = "height : 5%;"></div>
 												               	<small class="text-muted">
 												               		<c:choose>
-												               			<c:when test="${fn:length(postVO.post_Content) > 25 }">
+												               			<c:when test="${fn:length(postVO.post_Content) > 25}">
 												               				<c:out value = "${fn:substring(postVO.post_Content, 0, 25)}"/> . . .
 												               			</c:when>
 												               			<c:otherwise>
