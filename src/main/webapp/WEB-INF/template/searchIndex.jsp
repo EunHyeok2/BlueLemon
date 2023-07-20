@@ -546,7 +546,7 @@
 	                              	<!-- 트랜딩 아이템 -->
 	                              	<!-- 표시할 최대 문자 수 -->
                               		<c:set var = "maxChar" value = "50"/>                              
-                              		<c:forEach items="${hottestFeed}" var="postVO" begin="0" end="4">
+                              		<c:forEach items="${hottestFeed}" var="postVO" begin="0" end="3">
                          	     		<div class="p-3 border-bottom d-flex">
                          	        		<c:choose>
 									   			<c:when test = "${postVO.post_Image_Count == 0}">
@@ -558,7 +558,7 @@
 									               				<br><div style = "height : 5%;"></div>
 												               	<small class="text-muted">
 												               		<c:choose>
-												               			<c:when test="${fn:length(postVO.post_Content) > 25 }">
+												               			<c:when test="${fn:length(postVO.post_Content) > 25}">
 												               				<c:out value = "${fn:substring(postVO.post_Content, 0, 25)}"/> . . .
 												               			</c:when>
 												               			<c:otherwise>
@@ -573,7 +573,7 @@
 									                  				<c:otherwise>
 									                     				<small class="text-muted">
 														               		<c:choose>
-														               			<c:when test="${fn:length(postVO.post_Hashtag) > 22 }">
+														               			<c:when test="${fn:length(postVO.post_Hashtag) > 22}">
 														               				<c:out value = "${fn:substring(postVO.post_Hashtag, 0, 22)}"/> . . .
 														               			</c:when>
 														               			<c:otherwise>
@@ -599,7 +599,7 @@
 																</small>
 																<br><div style = "height : 5%;"></div>
 																<c:choose>
-																	<c:when test="${postVO.post_Hashtag eq null }">
+																	<c:when test="${postVO.post_Hashtag eq null}">
 																	</c:when>
 																	<c:otherwise>
 																		<small class="text-muted">
