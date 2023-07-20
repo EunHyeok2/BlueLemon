@@ -17,7 +17,9 @@ public class AlarmDAO {
 	private SqlSessionTemplate mybatis;
 
 	public void insertAlarm(AlarmVO alarmVO) {
-		if(alarmVO.getFrom_Mem().equals(alarmVO.getTo_Mem())) {			
+		// 알람 보내는 사람과 받는 사람이 같으면 알람 등록 X
+		if(alarmVO.getFrom_Mem().equals(alarmVO.getTo_Mem())) {		
+			
 		} else {
 			String result1 = mybatis.selectOne("PostMapper.checkZeroPostSeq");
 			if(result1 == null) {

@@ -573,7 +573,7 @@
 									                  				<c:otherwise>
 									                     				<small class="text-muted">
 														               		<c:choose>
-														               			<c:when test="${fn:length(postVO.post_Hashtag) > 22 }">
+														               			<c:when test="${fn:length(postVO.post_Hashtag) > 22}">
 														               				<c:out value = "${fn:substring(postVO.post_Hashtag, 0, 22)}"/> . . .
 														               			</c:when>
 														               			<c:otherwise>
@@ -599,7 +599,7 @@
 																</small>
 																<br><div style = "height : 5%;"></div>
 																<c:choose>
-																	<c:when test="${postVO.post_Hashtag eq null }">
+																	<c:when test="${postVO.post_Hashtag eq null}">
 																	</c:when>
 																	<c:otherwise>
 																		<small class="text-muted">
