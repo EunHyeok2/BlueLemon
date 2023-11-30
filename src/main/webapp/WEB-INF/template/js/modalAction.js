@@ -1,6 +1,5 @@
 
-                                             /*  게시글 등록 처리    */
-
+                                             //  게시글 등록 처리 
 // 해시태그
 const input = document.querySelector('textarea[name=post_Hashtag]');
 
@@ -14,8 +13,6 @@ tagify.on('add', function() {
 // 게시글 작성 변수들
 var fileNo = 0;
 var filesArr = new Array();
-
-
 
 
 // 추가로 업로드한 이미지 개수
@@ -156,7 +153,6 @@ $(function() {
                       
                       $('#Preview').append(htmlData);
                       fileNo++;
-                      
                   };
                   reader.readAsDataURL(file);
                   // 목록 추가
@@ -214,13 +210,14 @@ $(function() {
                       htmlData += '</li>';
                       
                       $('#editPreview').append(htmlData);
-                      currentEditFileNo++;
+                      currentEditFileNo++; // 현재 
                       console.log("후 currentEditFileNo", currentEditFileNo);
                       currentVariable(currentEditFileNo);
                   };
                   reader.readAsDataURL(file);
-                  // 목록 추가
+                  // 목록에 추가
                   
+                  // 
                   editVariable(editFilesArr, (editFileNo+1));
               } else {
                   continue;

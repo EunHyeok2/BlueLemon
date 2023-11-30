@@ -93,9 +93,6 @@ function modalseq(post_Seq) {
 		    likebutton.append(likeimg);
 		    $('#likeImage').append(likebutton, likeCount);
 		    
-		    
-		    
-		    
 		    // 1-6. 이미지 슬라이드를 적용할 컨테이너 생성
 		    // 이미지를 지정하는 컨테이너
 		    var sliderContainer = $('.image-slider .carousel-inner');
@@ -106,7 +103,6 @@ function modalseq(post_Seq) {
 		    // 슬라이드의 좌, 우 이동버튼을 지정하는 컨테이너
 		    var arrowButton = $('.image-slider .arrow-button');
 		    arrowButton.empty();
-		    
 		    
 		    // 이미지 슬라이더 아이템 생성 및 추가 
 		    // 하단의 인덱스버튼, 좌우 이동버튼 유무 고려

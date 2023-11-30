@@ -634,30 +634,30 @@ public class PostAndLikeController {
 			File folder = new File(folderPath);
 			File[] files = folder.listFiles();
 			if (files != null && deletedStrings.length > 0) {
-			 for (String deletedString : deletedStrings) {
-			        String alreadyFileName = deletedString.substring(deletedString.lastIndexOf('/') + 1);
-			        String absoluteFilePath = folderPath + alreadyFileName;
-			        File fileToDelete = new File(absoluteFilePath);
-			        if (fileToDelete.delete()) {
-			            System.out.println("파일 삭제: " + alreadyFileName);
-			            
-			            // 삭제된 파일 이후의 파일들 이름 변경
-			            int deletedIndex = Integer.parseInt(alreadyFileName.split("-")[1].split("\\.")[0]);
-			            for (int i = deletedIndex + 1; i <= files.length; i++) {
-			                String originalFilePath = folderPath + post_Seq + "-" + i + ".png";
-			                String newFilePath = folderPath + post_Seq + "-" + (i - 1) + ".png";
-			                File originalFile = new File(originalFilePath);
-			                File newFile = new File(newFilePath);
-			                if (originalFile.renameTo(newFile)) {
-			                    System.out.println("파일 이름 변경: " + originalFilePath + " -> " + newFilePath);
-			                } else {
-			                    System.out.println("파일 이름 변경 실패: " + originalFilePath);
-			                }
-			            }
-			        } else {
-			            System.out.println("파일 삭제 실패: " + alreadyFileName);
-			        }
-			    }
+				 for (String deletedString : deletedStrings) {
+				        String alreadyFileName = deletedString.substring(deletedString.lastIndexOf('/') + 1);
+				        String absoluteFilePath = folderPath + alreadyFileName;
+				        File fileToDelete = new File(absoluteFilePath);
+				        if (fileToDelete.delete()) {
+				            System.out.println("파일 삭제: " + alreadyFileName);
+				            
+				            // 삭제된 파일 이후의 파일들 이름 변경
+				            int deletedIndex = Integer.parseInt(alreadyFileName.split("-")[1].split("\\.")[0]);
+				            for (int i = deletedIndex + 1; i <= files.length; i++) {
+				                String originalFilePath = folderPath + post_Seq + "-" + i + ".png";
+				                String newFilePath = folderPath + post_Seq + "-" + (i - 1) + ".png";
+				                File originalFile = new File(originalFilePath);
+				                File newFile = new File(newFilePath);
+				                if (originalFile.renameTo(newFile)) {
+				                    System.out.println("파일 이름 변경: " + originalFilePath + " -> " + newFilePath);
+				                } else {
+				                    System.out.println("파일 이름 변경 실패: " + originalFilePath);
+				                }
+				            }
+				        } else {
+				            System.out.println("파일 삭제 실패: " + alreadyFileName);
+				        }
+				 }
 			}else {
 				System.out.println("기존 이미지 없음");
 			}
@@ -679,6 +679,7 @@ public class PostAndLikeController {
 		        }
 			}
 		}
+		
 		
 		if (vo.getPost_Public() == null) {
 		vo.setPost_Public("n");

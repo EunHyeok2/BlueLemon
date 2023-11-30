@@ -146,17 +146,12 @@ public class MainController {
 			Map<Integer, ArrayList<TagVO>> hashmap = new HashMap<>();
 			
 			// 정렬된 postlist의 인덱스 순으로 댓글 리스트를 매핑함.
-			// 동시에 각 게시글의 좋아요 카운트와 댓글 카운트를 저장.
 			for(int i=0; i<postlist.size(); i++) {
 				// 자신, 팔로잉한 사람들의 게시글의 post_seq를 불러온다.
 				int post_Seq = postlist.get(i).getPost_Seq();
 				
 				// i번째 게시글의 댓글 리스트를 담음
 				ArrayList<ReplyVO> replylist = replyService.getReplyPreview(post_Seq);
-				//System.out.println("replylist로 담음");
-				//System.out.println("[미리보기 댓글 - 1] replylist에 해당 게시글의 댓글 3개를 가져옴 / 아직 해당 댓글 좋아요 눌렀나 체크는 안됨");
-				//System.out.println("[미리보기 댓글 - 1.5] replylist size : " + replylist.size());
-				// i번째 게시글의 댓글 좋아요 여부 체크
 				for(int k = 0; k < replylist.size(); k++) {
 					ReplyVO voForReplyCheck = replylist.get(k);
 					String realReply_Member_Id = replylist.get(k).getMember_Id();
